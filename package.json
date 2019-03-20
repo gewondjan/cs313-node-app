@@ -1,0 +1,16 @@
+{
+  "name": "cs313-node",
+  "version": "1.0.0",
+  "description": "This is my node project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ryan Gewondjan",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "pg": "^7.9.0"
+  }
+}
