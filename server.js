@@ -8,11 +8,11 @@ app.use('/views', express.static(path.join(__dirname, 'views')));
 
 //Set up the view engine
 app.set('view engine', 'ejs');
-
+app.set('views', path.join(__dirname, 'views'));
 
 app.get('/', (req, res) => {
 
-    res.render('/views/index');
+    res.render('./index');
 
 });
 
