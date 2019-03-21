@@ -1,4 +1,5 @@
 require('dotenv').config();
+const dbAccess = require('./dbAccess.js');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -17,7 +18,14 @@ app.get('/', (req, res) => {
 
 app.get('/setUp', (req, res) => {
     res.render('./index', {contentForBody: 'setup'});
+});
 
+app.get('/getSkills', async (req, res) => {
+    res.send(await dbAccess.getAllSkills());
+});
+
+app.get('/getEmployees', async (req, res) => {
+    res.send(await dbAccess.getAllEmployees());
 });
 
 
