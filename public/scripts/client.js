@@ -13,6 +13,7 @@ function loadPage(pageName, inputObject) {
             loadEmployeeEdit(inputObject.employeeId);
             break;
         case 'match':
+            loadMatch();
             break;
         case 'complete':
             break;
@@ -20,6 +21,31 @@ function loadPage(pageName, inputObject) {
             break;
     }
 }
+
+function loadMatch() {
+
+    
+    $.ajax({
+        method: 'GET',
+        url: '/getSkills',
+        success: (data) => {
+            var selectIds = ['skillSelect-1','skillSelect-2','skillSelect-3'];
+            var selects = "";
+            selectIds.forEach((id, index) => {
+                selects += `<label for='${id}'>#${index + 1} Skill</label>&nbsp;&nbsp;<select id='${id}'>`;
+                selects += `<option></option>`; //blank option
+                data.forEach((skill) => {
+                    selects += `<option id='${skill.id}'>${skill.name}</option>`
+                });               
+                selects += `</select><br>`;
+            });
+            $('#skillSelects').html(selects);
+        }
+
+    });
+    
+}
+
 
 function loadSetUp() {
     loadSkills();
@@ -102,9 +128,9 @@ function loadEmployeeEdit(employeeId) {
         },
         success: function(data) {
             $('#employeeNameHeader').html(data[0].employee_name);
-            $('#employeePhoto').attr('src', `./images/${data[0].photo_path}`);
             $('#employeeMajor').html(data[0].major);
             $('#employeeMajorEdit').html(`<button onclick='editMajor(${data[0].employee_id})'><i class="fas fa-edit"></i></button>`);
+            $('#employeePhoto').attr('src', `./images/${data[0].photo_path}`);
         }
     });
 }
