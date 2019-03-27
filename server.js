@@ -65,7 +65,7 @@ app.post('/addPhoto', async (req, res) => {
     var employeeId = req.body.employeeId;
     var timestamp = (new Date()).getTime();
     var newPhotoPath = `employee${employeeId}${timestamp}.jpg`;
-    fs.unlink(`./public/images/${oldPhoto}`)
+    fs.unlinkSync(`./public/images/${oldPhoto}`);
     fs.writeFileSync(`./public/images/${newPhotoPath}`, newPhoto, {encoding: 'base64'});
     res.send({newPhotoPath: newPhotoPath});
 
