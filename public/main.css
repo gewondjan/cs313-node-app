@@ -29,3 +29,20 @@
     text-decoration: underline;
 
 }
+
+.edit-div {
+    padding: 20px 20px 10px 150px;
+
+}
+
+.edit-div h2 {
+    display: inline;
+}
+
+.employee-edit-photo {
+    width: 200px;
+}
+
+.make-inline {
+    display: inline;
+}

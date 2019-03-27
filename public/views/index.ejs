@@ -3,7 +3,8 @@
 <head>
     <%- include externalInput %>
 </head>
-<body onload='loadPage("<%= contentForBody %>")'>
+<!-- Note we must use ` marks instead of " marks due to the JSON stringify object getting confused. -->
+<body onload='loadPage(`<%= contentForBody %>`, `<%= inputObject %>`)'>
     <%- include(navigationBar, {active: contentForBody}) %>
     <%- include(contentForBody) %>
 </body>

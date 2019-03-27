@@ -47,6 +47,35 @@ module.exports.getAllEmployees = function getAllEmployees() {
     
 }
 
+module.exports.getEmployee = function getEmployee(employeeId) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'SELECT es.employee_id, es.skill_id, e.name AS employee_name, e.photo_path, e.major, s.name AS skill_name, points from employees AS e JOIN employee_skills AS es ON es.employee_id = e.id JOIN skills AS s on es.skill_id = s.id WHERE e.id = $1';
+        pool.query(stmt, [employeeId], function(err, res) {
+            if (err) reject(err)
+            resolve(res.rows);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+} 
+
+module.exports.updateEmployeePhoto = function updateEmployeePhoto(employeeId, newPhotoPath) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'UPDATE employees SET photo_path = $2 WHERE id = $1';
+        pool.query(stmt, [employeeId, newPhotoPath], function(err, res) {
+            if (err) reject(err)
+            resolve(res.rows);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
 
 
 //Test
