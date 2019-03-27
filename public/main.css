@@ -1,1 +1,31 @@
 /* No Styles Yet! */
+
+
+.navbar-brand {
+    text-align: center;
+
+}
+
+.large-font {
+    font-size: 2em;
+}
+
+
+.add-button {
+    font-size: .7em;
+    border-radius: 40px;
+    background-color: green;
+
+
+}
+
+.remove-button {
+    font-size: .7em;
+    border-radius: 40px;
+    background-color: red;
+}
+
+.underline {
+    text-decoration: underline;
+
+}

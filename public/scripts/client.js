@@ -1,7 +1,21 @@
-function test() {
-    $('#homeHeader').html('This is different');
-}
 
+
+
+function loadPage(pageName) {
+    switch(pageName) {
+        case 'home':
+            break;
+        case 'setup':
+            loadSetUp();
+            break;
+        case 'match':
+            break;
+        case 'complete':
+            break;
+        default:
+            break;
+    }
+}
 
 function loadSetUp() {
     loadSkills();
@@ -15,7 +29,7 @@ function loadSkills() {
         success: function(data) {
             $('#skillsList').empty();
             data.forEach((item) => {
-                $('#skillsList').append(`<li id='skill-${item.id}'>${item.name}</li>`);
+                $('#skillsList').append(`<li id='skill-${item.id}'>${item.name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkill(skill-${item.id})'><b><i class="fas fa-minus"></i></b></li>`);
             });
         }
     });

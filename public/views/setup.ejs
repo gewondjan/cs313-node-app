@@ -1,24 +1,26 @@
-<div onload='loadSetUp()'>
-<h1>Time to get Set up</h1>
-<button onclick='loadSetUp()'>Load Setup</button>
+<!-- The code below is from: https://getbootstrap.com/docs/4.0/components/jumbotron/ -->
+<div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Set Up</h1>
+        </div>
+    </div>
 <div class ='container'>
 
     <div class='row'>
         
         <div class='col'>
-            <h2>Skills: </h2>
+            <h2 class='underline'>Skills <button class='add-button' onclick='addSkill()'><i class="fas fa-plus"></i></button></h2>
             <ul id='skillsList'>
-                <li>Test Skill</li>
+
             </ul>    
                         
         </div>
         
         <div class='col'>
-            <h2>Employees: </h2>
+            <h2 class='underline'>Employees: </h2>
             <ul id='employeesList'>
-                <li>Test Employee</li>
+
             </ul>
         </div>
     </div>
-</div>
 </div>

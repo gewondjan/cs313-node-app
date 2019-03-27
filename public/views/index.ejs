@@ -3,8 +3,8 @@
 <head>
     <%- include externalInput %>
 </head>
-<body>
-    <%- include navigationBar %>
+<body onload='loadPage("<%= contentForBody %>")'>
+    <%- include(navigationBar, {active: contentForBody}) %>
     <%- include(contentForBody) %>
 </body>
 </html> 
