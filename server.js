@@ -1,5 +1,6 @@
 require('dotenv').config();
 const dbAccess = require('./dbAccess.js');
+const logic = require('./logic.js');
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -78,6 +79,11 @@ app.get('/getEmployees', async (req, res) => {
         res.send(await dbAccess.getEmployee(req.query.employeeId));
     }      
 
+});
+
+app.get('/getEmployeeSearchResults', async (req, res) => {
+    var sortedEmployees = await logic.sortEmployeesBySearchCriteria(req.query.orderedSkillsArray);
+    res.send(sortedEmployees);
 });
 
 app.post('/addPhoto', async (req, res) => {

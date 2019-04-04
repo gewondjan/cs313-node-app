@@ -34,7 +34,23 @@ module.exports.getAllSkills = function getAllSkills() {
 module.exports.getAllEmployees = function getAllEmployees() {
     var pool = getPool();
     return new Promise(function(resolve, reject) {
-        var stmt = 'SELECT * FROM employees';
+        var stmt = 'SELECT id as employee_id, name as employee_name, photo_path, major from employees ORDER BY id';
+        pool.query(stmt, function(err, res) {
+            if (err) reject(err)
+            resolve(res.rows);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+    
+}
+
+module.exports.getAllEmployeesPlusSkills = function getAllEmployeesPlusSkills() {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'SELECT e.id as employee_id, es.skill_id, es.id AS employee_skill_id, e.name AS employee_name, e.photo_path, e.major, s.name AS skill_name, points from employees AS e LEFT JOIN employee_skills AS es ON es.employee_id = e.id LEFT JOIN skills AS s on es.skill_id = s.id ORDER BY e.id asc, points desc';
         pool.query(stmt, function(err, res) {
             if (err) reject(err)
             resolve(res.rows);

@@ -76,10 +76,10 @@ function loadEmployees() {
             data.forEach((item) => {
                 $('#employeesList').append(`
       <!-- This code is all from:  https://getbootstrap.com/docs/4.0/components/card/  -->
-                        <div id='employee-${item.id}' class="card" style="width: 18rem;">
+                        <div id='employee-${item.employee_id}' class="card" style="width: 18rem;">
                         <img class="card-img-top" src="../images/${(item.photo_path) ? item.photo_path : 'NoPicture.jpg'}" alt="No Photo Added">
                         <div class="card-body">
-                            <h5 class="card-title make-inline">${item.name}</h5>&nbsp;&nbsp;&nbsp;<a href="/employeeEdit?employeeId=${item.id}" class="card-link">Edit</a>
+                            <h5 class="card-title make-inline">${item.employee_name}</h5>&nbsp;&nbsp;&nbsp;<a href="/employeeEdit?employeeId=${item.employee_id}" class="card-link">Edit</a>
                         </div>
                         </div>`
                 );
@@ -283,8 +283,6 @@ function removeSkillFromEmployee(employeeSkillId) {
             $(`#skill-${employeeSkillId}`).remove();
         }
 
-
     });
-
 
 }
