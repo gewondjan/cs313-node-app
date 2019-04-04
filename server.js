@@ -122,7 +122,7 @@ app.post('/addSkillToEmployee', async (req, res) => {
     res.send({id: rows[0].id});
 });
 
-app.delete('removeSkillFromEmployee', async (req, res) => {
+app.delete('/removeSkillFromEmployee', async (req, res) => {
     await dbAccess.removeSkillFromEmployee(req.body.employeeSkillId);
     res.send();
 });

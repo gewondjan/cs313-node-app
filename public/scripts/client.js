@@ -134,8 +134,8 @@ function loadEmployeeEdit(employeeId) {
             $('#employeePhoto').attr('src', `./images/${(data[0].photo_path) ? data[0].photo_path : 'NoPicture.jpg'}`);
             var skillsList = "";
             data.forEach((row) => {
-                if (row.skill.name != null) {
-                    skillsList += `<li id='skill-${row.skill_id}'>${row.skill_name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkillFromEmployee(${row.employee_skill_id})'><b><i class="fas fa-minus"></i></b></li>`
+                if (row.skill_name != null) {
+                    skillsList += `<li id='skill-${row.employee_skill_id}'>${row.skill_name} - ${row.points}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkillFromEmployee(${row.employee_skill_id})'><b><i class="fas fa-minus"></i></b></li>`
                 }
             });
             $(`#employeeSkills`).html(skillsList);
@@ -269,5 +269,22 @@ function addEmployeeSkillToDatabase() {
         }
 
     })
+
+}
+
+function removeSkillFromEmployee(employeeSkillId) {
+    $.ajax({
+        method: 'DELETE',
+        url: '/removeSkillFromEmployee',
+        data: {
+            employeeSkillId: employeeSkillId
+        },
+        success: function(data) {
+            $(`#skill-${employeeSkillId}`).remove();
+        }
+
+
+    });
+
 
 }
