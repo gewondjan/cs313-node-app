@@ -77,8 +77,39 @@ module.exports.updateEmployeePhoto = function updateEmployeePhoto(employeeId, ne
     });
 }
 
+module.exports.addSkill = function addSkill(nameOfSkillToAdd) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'INSERT INTO skills (user_id, name) VALUES (1, $1)';
+        pool.query(stmt, [nameOfSkillToAdd], function(err, res) {
+            if (err) reject(err)
+            resolve(res);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
 
-//Test
+module.exports.removeSkill = function removeSkill(id) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'DELETE FROM skills WHERE id = $1';
+        pool.query(stmt, [id], function(err, res) {
+            if (err) reject(err)
+            resolve(res);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
+
+
 // (async function() {
-//     console.log(await getAllSkills()); 
-// })();
+//     console.log(await get('What up'));
+// }());
+
+//TODO need to figure out what the issue is with the async function here, and then also I need to console log the output, we want the add Skill function to return the id.

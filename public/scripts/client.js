@@ -59,7 +59,7 @@ function loadSkills() {
         success: function(data) {
             $('#skillsList').empty();
             data.forEach((item) => {
-                $('#skillsList').append(`<li id='skill-${item.id}'>${item.name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkill(skill-${item.id})'><b><i class="fas fa-minus"></i></b></li>`);
+                $('#skillsList').append(`<li id='skill-${item.id}'>${item.name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkill(${item.id})'><b><i class="fas fa-minus"></i></b></li>`);
             });
         }
     });
@@ -135,3 +135,40 @@ function loadEmployeeEdit(employeeId) {
     });
 }
 
+function addSkillEditor() {
+    if ($(`#newSkillEditor`).length == 0) {
+        $(`#skillsList`).html(`<li id='listItemForNewSkillEditor'><input type='text' id='newSkillEditor'><button onclick='addSkillToDatabase()'><i class="fas fa-check"></i></button></li>` + $(`#skillsList`).html());
+    }
+}
+
+function addSkillToDatabase() {
+    var newSkillName =  $(`#newSkillEditor`).val();
+    if (newSkillName.length > 0) {
+
+    }
+    $.ajax({
+        method: 'POST',
+        url: '/addSkill',
+        data: { skillName:  newSkillName},
+        success: function(data) {
+            loadSkills();
+            // $(`#listItemForNewSkillEditor`).html();
+            // //<li id='skill-${item.id}'>${item.name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkill(${item.id})'><b><i class="fas fa-minus"></i></b></li>
+            // //TODO need to figure out how to get the id of the skill from the database method 
+        }
+    });
+}
+
+function removeSkill(id){
+    $.ajax({
+        method: 'DELETE',
+        url: '/deleteSkill',
+        data: { id:  id},
+        success: function(data) {
+            $(`#skill-${id}`).remove();
+        }
+    });
+
+
+
+}

@@ -73,5 +73,15 @@ app.post('/addPhoto', async (req, res) => {
 
 });
 
+app.post('/addSkill', async (req, res) => {
+    await dbAccess.addSkill(req.body.skillName);
+    res.send();
+});
+
+app.delete('/deleteSkill', async (req, res) => {
+    await dbAccess.removeSkill(req.body.id);
+    res.send();
+});
+
 app.listen(port, () => console.log('Running on port ' + port));
 
