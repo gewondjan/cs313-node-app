@@ -3,6 +3,7 @@
 <div class="jumbotron jumbotron-fluid">
         <div class="container">
           <h1 class="display-4" id='employeeNameHeader'></h1>
+          <input id='employeeIdHolder' hidden=true>
           <div>
             <div id='containerForPhoto'>
                 <img id='employeePhoto' class='employee-edit-photo' alt='Employee Photo'></img>
@@ -15,4 +16,14 @@
 
 <div class='edit-div'>
   <h2>Major: </h2><h2 id='employeeMajor'></h2>&nbsp;&nbsp;<span id='employeeMajorEdit'></span>
+  <br>
+  <h2>Skills:</h2>
+  <br>
+  <ul id='employeeSkills'>
+
+  </ul>
+  <br>
+  <button class='btn-secondary' onclick='addSkillEditor()'>Add Skill</button>
+  <a href='/setUp'><button class='btn-primary'>Back to Set Up</button></a>
+  <button class='btn-danger' onclick='removeEmployee()'>Delete Employee</button>
 <div>

@@ -21,6 +21,27 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+/*********************************************
+ *  This middleware function gives me the
+ *  information I want for each request
+ ********************************************/
+var printInformation = function(req, res, next) {
+    
+    var information;
+    if (req.query && Object.keys(req.query).length > 0){
+        information = 'query: ' + JSON.stringify(req.query);
+    } else if (req.body && Object.keys(req.body).length > 0) {
+        information = 'body: ' + JSON.stringify(req.body);
+    } else {
+        information = 'no information';
+    }
+
+    var message = `Request made to ${req.url} with ${information}`;
+    console.log(message);
+    next();
+};
+
+app.use(printInformation);
 
 
 /**********************************************
@@ -80,6 +101,26 @@ app.post('/addSkill', async (req, res) => {
 
 app.delete('/deleteSkill', async (req, res) => {
     await dbAccess.removeSkill(req.body.id);
+    res.send();
+});
+
+app.post('/addEmployee', async (req, res) => {
+    var rows = await dbAccess.addEmployee(req.body.employeeName);
+    res.send({id: rows[0].id});
+});
+
+app.delete('/removeEmployee', async (req, res) => {
+    await dbAccess.removeEmployee(req.body.employeeId);
+    res.send();
+});
+
+app.post('/addSkillToEmployee', async (req, res) => {
+    var rows = await dbAccess.addSkillToEmployee(req.body.employeeId, req.body.skillId, req.body.points);
+    res.send({id: rows[0].id});
+});
+
+app.delete('removeSkillFromEmployee', async (req, res) => {
+    await dbAccess.removeSkillFromEmployee(req.body.employeeSkillId);
     res.send();
 });
 

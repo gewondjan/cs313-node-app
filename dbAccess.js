@@ -50,11 +50,11 @@ module.exports.getAllEmployees = function getAllEmployees() {
 module.exports.getEmployee = function getEmployee(employeeId) {
     var pool = getPool();
     return new Promise(function(resolve, reject) {
-        var stmt = 'SELECT es.employee_id, es.skill_id, e.name AS employee_name, e.photo_path, e.major, s.name AS skill_name, points from employees AS e JOIN employee_skills AS es ON es.employee_id = e.id JOIN skills AS s on es.skill_id = s.id WHERE e.id = $1';
+        var stmt = 'SELECT e.id as employee_id, es.skill_id, es.id AS employee_skill_id, e.name AS employee_name, e.photo_path, e.major, s.name AS skill_name, points from employees AS e LEFT JOIN employee_skills AS es ON es.employee_id = e.id LEFT JOIN skills AS s on es.skill_id = s.id WHERE e.id = $1';
         pool.query(stmt, [employeeId], function(err, res) {
             if (err) reject(err)
             resolve(res.rows);
-        });    
+        });   
     }).catch((err) => {
         console.log(err.message);
     }).finally(() => {
@@ -107,9 +107,78 @@ module.exports.removeSkill = function removeSkill(id) {
     });
 }
 
+module.exports.addEmployee = function addEmployee(employeeName) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'INSERT INTO employees (user_id, name, photo_path, major) VALUES (1, $1, NULL, NULL) RETURNING id';
+        pool.query(stmt, [employeeName], function(err, res) {
+            if (err) reject(err)
+            resolve(res.rows);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
 
-// (async function() {
-//     console.log(await get('What up'));
-// }());
+module.exports.removeEmployee = function removeEmployee(employeeId) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'DELETE FROM employee_skills WHERE employee_id = $1';
+        pool.query(stmt, [employeeId], function(err, res) {
+            if (err) reject(err)
+            var stmt2 = 'DELETE FROM projects WHERE employee_assigned = $1';
+            pool.query(stmt2, [employeeId], function(err2, res2) {
+                if (err2) reject(err2)
+            var stmt3 = 'DELETE FROM employees WHERE id = $1';
+                pool.query(stmt3, [employeeId], function(err3, res3) {
+                    if (err3) reject(err3)
+                    resolve(res3);
+                }); 
+            });    
+        });    
+    })
+    .catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
 
-//TODO need to figure out what the issue is with the async function here, and then also I need to console log the output, we want the add Skill function to return the id.
+module.exports.removeSkillFromEmployee = function removeSkillFromEmployee(employeeSkillId) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'DELETE from employee_skills WHERE id = $1';
+        pool.query(stmt, [employeeSkillId], function(err, res) {
+            if (err) reject(err)
+            resolve(res);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+
+}
+
+
+module.exports.addSkillToEmployee = function addSkillToEmployee(employeeId, skillId, points) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'INSERT INTO employee_skills (employee_id, skill_id, points) VALUES ($1, $2, $3) RETURNING id'; //(SELECT name FROM skills WHERE id = $2)';
+        pool.query(stmt, [employeeId, skillId, points], function(err, res) {
+            if (err) reject(err)
+            resolve(res.rows);
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
+
+
+//  (async function() {
+//      await removeSkillFromEmployee(5);
+//  }());
