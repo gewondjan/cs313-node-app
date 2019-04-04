@@ -77,7 +77,7 @@ function loadEmployees() {
                 $('#employeesList').append(`
       <!-- This code is all from:  https://getbootstrap.com/docs/4.0/components/card/  -->
                         <div id='employee-${item.id}' class="card" style="width: 18rem;">
-                        <img class="card-img-top" src="../images/${item.photo_path}" alt="No Photo Added">
+                        <img class="card-img-top" src="../images/${(item.photo_path) ? item.photo_path : 'NoPicture.jpg'}" alt="No Photo Added">
                         <div class="card-body">
                             <h5 class="card-title make-inline">${item.name}</h5>&nbsp;&nbsp;&nbsp;<a href="/employeeEdit?employeeId=${item.id}" class="card-link">Edit</a>
                         </div>
@@ -131,16 +131,14 @@ function loadEmployeeEdit(employeeId) {
             $('#employeeIdHolder').val(data[0].employee_id);
             $('#employeeMajor').html(data[0].major);
             $('#employeeMajorEdit').html(`<button onclick='editMajor(${data[0].employee_id})'><i class="fas fa-edit"></i></button>`);
+            $('#employeePhoto').attr('src', `./images/${(data[0].photo_path) ? data[0].photo_path : 'NoPicture.jpg'}`);
             var skillsList = "";
             data.forEach((row) => {
-                skillsList += `<li id='skill-${row.skill_id}'>${row.skill_name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkillFromEmployee(${row.employee_skill_id})'><b><i class="fas fa-minus"></i></b></li>`
+                if (row.skill.name != null) {
+                    skillsList += `<li id='skill-${row.skill_id}'>${row.skill_name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkillFromEmployee(${row.employee_skill_id})'><b><i class="fas fa-minus"></i></b></li>`
+                }
             });
             $(`#employeeSkills`).html(skillsList);
-            
-            
-            if (data[0].photo_path) {
-                $('#employeePhoto').attr('src', `./images/${data[0].photo_path}`);
-            }
         }
     });
 }
