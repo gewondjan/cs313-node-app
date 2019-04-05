@@ -94,7 +94,12 @@ app.post('/addPhoto', async (req, res) => {
     var newPhotoPath = `employee${employeeId}${timestamp}.jpg`;
     //We only want to delete the image if the image is not the NoPicture image.
     if (oldPhoto != 'NoPicture.jpg'){
-        fs.unlinkSync(`./public/images/${oldPhoto}`);
+        fs.unlink(`./public/images/${oldPhoto}`, (error) => {
+            if (error) {
+                console.log("There was an error deleting the file");
+            }
+
+        });
     }
     fs.writeFileSync(`./public/images/${newPhotoPath}`, newPhoto, {encoding: 'base64'});
     res.send({newPhotoPath: newPhotoPath});

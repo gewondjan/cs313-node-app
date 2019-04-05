@@ -43,6 +43,10 @@
     width: 200px;
 }
 
+.employee-search-results-photo {
+    width: 100px;
+}
+
 .make-inline {
     display: inline;
 }

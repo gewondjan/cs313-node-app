@@ -24,7 +24,7 @@ function loadPage(pageName, inputObject) {
 
 function loadMatch() {
 
-    
+
     $.ajax({
         method: 'GET',
         url: '/getSkills',
@@ -32,18 +32,105 @@ function loadMatch() {
             var selectIds = ['skillSelect-1','skillSelect-2','skillSelect-3'];
             var selects = "";
             selectIds.forEach((id, index) => {
-                selects += `<label for='${id}'>#${index + 1} Skill</label>&nbsp;&nbsp;<select id='${id}'>`;
+                selects += `<label for='${id}'>#${index + 1} Skill</label>&nbsp;&nbsp;<select class='projectSkillSelectors' id='${id}'>`;
                 selects += `<option></option>`; //blank option
                 data.forEach((skill) => {
                     selects += `<option id='${skill.id}'>${skill.name}</option>`
-                });               
+                });
                 selects += `</select><br>`;
             });
             $('#skillSelects').html(selects);
+
+
+            $(`.projectSkillSelectors`).on('change', (event) => {
+                //This gets the array of skills getting rid of the blanks.
+                var arrayOfSkills = selectIds.reduce((array, id) => {
+                    var skill = $(`#${id}`).val();
+                    if (skill != '') {
+                        array.push($(`#${id}`).val());
+                    }
+                    return array;
+                }, []);
+
+                //Great for debugging
+                // alert(arrayOfSkills);
+
+                getEmployeeMatchResults(arrayOfSkills);
+
+            });
+
         }
 
     });
+
+}
+
+
+function getEmployeeMatchResults(arrayOfSkills) {
+
+    $.ajax({
+        method: 'GET',
+        url: '/getEmployeeSearchResults',
+        data: {
+            orderedSkillsArray: arrayOfSkills
+        },
+        success: function(data) {
+            loadEmployeeResults(data);
+        }
+    });
+}
+
+function loadEmployeeResults(employeeList) {
     
+    //The employeeList is an array of objects of type:
+    /*
+        { id: 1,
+        name: 'Ben Earl',
+        photo_path: 'employee11554333938501.jpg',
+        skills: [ [Object], [Object] ],
+        relevantSkills: [ [Object] ],
+        rank: 100 },
+    */
+    
+    $(`#employeeMatches`).empty();
+    
+    employeeList.forEach((employee) => {
+        var employeeResultHtml = 
+        `<div class="card" id='employee-${employee.id}'>
+            <div class="card-body">
+            <div class='row'>
+            <div class='col'>
+                <h5 class="card-title">${employee.name}</h5>
+                <img alt='employee photo' class='employee-search-results-photo' src='./images/${employee.photo_path}'>
+            </div>
+            <div class='col'>
+                <h5 class="card-title">Relevant Skills</h5>
+                `;
+
+            employee.relevantSkills.forEach((relevantSkill) => {
+                employeeResultHtml += `<h6>${relevantSkill.name}&nbsp;${relevantSkill.points}pts</h6>`;
+            });
+             
+            employeeResultHtml += 
+            `</div>
+            <div class='col'>
+                <h5 class="card-title">Other Skills</h5>`;
+
+            employee.otherSkills.forEach((otherSkill) => {
+                employeeResultHtml += `<h6>${otherSkill.name}&nbsp;${otherSkill.points}pts</h6>`;
+            });
+
+            employeeResultHtml += 
+            `</div>
+            </div>
+            </div>
+        </div>`;
+        
+        
+        $(`#employeeMatches`).append(employeeResultHtml);
+    });
+
+
 }
 
 
@@ -113,7 +200,7 @@ function loadEmployeeEdit(employeeId) {
                 },
                 success: function(data) {
                     $('#employeePhoto').attr('src', `./images/${data.newPhotoPath}`);
-                }    
+                }
             });
         }
         reader.readAsDataURL(photo);
@@ -162,7 +249,7 @@ function addSkillToDatabase() {
             loadSkills();
             // $(`#listItemForNewSkillEditor`).html();
             // //<li id='skill-${item.id}'>${item.name}&nbsp;&nbsp;<button class='remove-button' onclick='removeSkill(${item.id})'><b><i class="fas fa-minus"></i></b></li>
-            // //TODO need to figure out how to get the id of the skill from the database method 
+            // //TODO need to figure out how to get the id of the skill from the database method
         }
     });
 }
@@ -208,7 +295,7 @@ function getBaseUrl() {
     return `${window.location.protocol}//${host}`;
 }
 
-function removeEmployee() {    
+function removeEmployee() {
     $.ajax({
         method: 'DELETE',
         url: 'removeEmployee',
@@ -238,7 +325,7 @@ function addSkillEditor() {
                         options += `<option id='skill-${item.id}' value='${item.id}'>${item.name}</option>`;
                     }
                 });
-                //Create the editor                
+                //Create the editor
                 var select = `<select id='skillChosen'>${options}</select>`;
                 var pointsInput = `<input type='text' id='employeeSkillPointsEditor' placeholder='Points'>`
                 $(`#employeeSkills`).html($(`#employeeSkills`).html() + `<span id='newEmployeeSkillEditor'>${select}${pointsInput}<button onclick='addEmployeeSkillToDatabase()'><i class="fas fa-check"></i></button></span>`);
@@ -255,7 +342,7 @@ function addEmployeeSkillToDatabase() {
     //For debugging purposes to make sure you have the right values
     // alert(`employeeId: ${employeeId}. skillId: ${skillId}. points: ${points}`);
 
-    $.ajax({        
+    $.ajax({
         method: 'POST',
         url: 'addSkillToEmployee',
         data: {
@@ -286,3 +373,14 @@ function removeSkillFromEmployee(employeeSkillId) {
     });
 
 }
+
+//TODO:
+//1. add event listeners to each of the 3 inputs and make them call a function that gets the array (gets rid of blanks), then
+//sends the array to the /getEmployeeSearchResults endpoint to get the sorted list of employees.
+//2. Once we have the sorted list, we need to display all employees in the card deck, from most relevant to least.
+
+//3. For some reason I had to refresh the screen for the photo to change to the photo that I selected on the employee edit page.
+
+//4. Review the add skills button
+
+//5. at some point get rid of the delete skills bug (delete all the dependancies).

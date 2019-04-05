@@ -1,9 +1,7 @@
 const dbAccess = require('./dbAccess.js');
 
 
-
-// module.exports.sortEmployeesBySearchCriteria = 
-async function sortEmployeesBySearchCriteria(orderedSkillsArray) {
+module.exports.sortEmployeesBySearchCriteria = async function sortEmployeesBySearchCriteria(orderedSkillsArray) {
     //Get list of all employees ordered in the best way for the project.
     var employeeSkillsRows = await dbAccess.getAllEmployeesPlusSkills();
     
@@ -99,6 +97,9 @@ async function sortEmployeesBySearchCriteria(orderedSkillsArray) {
         var rankPointsForEmployee = 0;
         var numberOfSkillsMatched = 0;
         employee.relevantSkills = [];
+        // employee.relevantSkills = employee.relevantSkills.slice(0, 0);
+        employee.otherSkills = [];
+        // employee.otherSkills = employee.otherSkills.slice(0, 0);
         orderedSkillsArray.forEach((skill, index, array) => {
             var weight = array.length - index;
             employee.skills.forEach((employeeSkill) => {
@@ -106,6 +107,8 @@ async function sortEmployeesBySearchCriteria(orderedSkillsArray) {
                     rankPointsForEmployee += employeeSkill.points * weight;
                     numberOfSkillsMatched++;
                     employee.relevantSkills.push(employeeSkill);
+                } else {
+                    employee.otherSkills.push(employeeSkill);
                 }
             });            
         });
@@ -117,7 +120,7 @@ async function sortEmployeesBySearchCriteria(orderedSkillsArray) {
         return employee1.rank < employee2.rank;
     });
 
-    console.log(employeeArray);
+    console.log('logging:', employeeArray);
     //returns an ordered list
     return employeeArray;
 
@@ -126,4 +129,6 @@ async function sortEmployeesBySearchCriteria(orderedSkillsArray) {
 
 //sortEmployeesBySearchCriteria(['CSS', 'HTML5', 'Hard work', 'npm']);
 
+
+//TODO: Figure out why the numbers are duplicating (the skills are and the unused skills)
 
