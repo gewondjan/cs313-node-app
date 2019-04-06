@@ -150,6 +150,10 @@ function loadEmployeeResults(employeeList) {
             //Make this remove the disabled option for the button, and make the button call a function that will get the id from the 
             //hidden input, and assign the employee to the project (this will need to load some information to the database.)
 
+            $(`#assignButton`).removeAttr('disabled');
+            $(`#assignButton`).removeClass('btn-outline-primary');
+            $(`#assignButton`).addClass('btn-primary');
+
         });
 
     });

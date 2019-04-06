@@ -57,5 +57,10 @@
 }
 
 .selected-employee {
-    background-color: red;
+    background-color: skyblue;
+}
+
+.assign-button {
+    text-align: center;
+    font-size: 2em;
 }
