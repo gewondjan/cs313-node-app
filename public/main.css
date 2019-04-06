@@ -50,3 +50,12 @@
 .make-inline {
     display: inline;
 }
+
+.no-content-text {
+    color: gray;
+    text-align: center;
+}
+
+.selected-employee {
+    background-color: red;
+}

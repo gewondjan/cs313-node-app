@@ -106,12 +106,23 @@ module.exports.sortEmployeesBySearchCriteria = async function sortEmployeesBySea
                 if (employeeSkill.name == skill) {
                     rankPointsForEmployee += employeeSkill.points * weight;
                     numberOfSkillsMatched++;
-                    employee.relevantSkills.push(employeeSkill);
-                } else {
-                    employee.otherSkills.push(employeeSkill);
+                    if (employee.relevantSkills.findIndex((relevantSkill) => { return relevantSkill == employeeSkill; }) == -1) {
+                        employee.relevantSkills.push(employeeSkill);
+                    }
                 }
-            });            
+            });          
         });
+
+        //Collect the other skills list
+        employee.otherSkills = employee.skills.filter((employeeSkill) => {
+            var indexOfEmployeeSkillEqualToRelevantSkill = employee.relevantSkills.findIndex((relevantSkill) => {
+                return relevantSkill == employeeSkill;
+            });
+            //If the indexOfEmployeeSkillEqualToRelevantSkill equals -1 then, we couldn't find that skill in the relevant skills list,
+            //so add it to the otherSkills List
+            return (indexOfEmployeeSkillEqualToRelevantSkill == -1);
+        });
+
         employee.rank = rankPointsForEmployee * numberOfSkillsMatched;
     });
 

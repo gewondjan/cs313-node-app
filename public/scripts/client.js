@@ -67,7 +67,7 @@ function loadMatch() {
 
 
 function getEmployeeMatchResults(arrayOfSkills) {
-
+if (arrayOfSkills.length > 0) {
     $.ajax({
         method: 'GET',
         url: '/getEmployeeSearchResults',
@@ -78,6 +78,16 @@ function getEmployeeMatchResults(arrayOfSkills) {
             loadEmployeeResults(data);
         }
     });
+
+} else {
+
+    //When the search bars are empty, load the No Search Criteria message
+    $(`#employeeMatches`).html(
+        `<br>
+        <h5 class='no-content-text'>No Search Criteria</h5>`
+    );
+
+}
 }
 
 function loadEmployeeResults(employeeList) {
@@ -92,11 +102,11 @@ function loadEmployeeResults(employeeList) {
         rank: 100 },
     */
     
-    $(`#employeeMatches`).empty();
+   $(`#employeeMatches`).empty();
     
     employeeList.forEach((employee) => {
         var employeeResultHtml = 
-        `<div class="card" id='employee-${employee.id}'>
+        `<div class="card search-results" id='employee-${employee.id}'>
             <div class="card-body">
             <div class='row'>
             <div class='col'>
@@ -128,6 +138,20 @@ function loadEmployeeResults(employeeList) {
         
         
         $(`#employeeMatches`).append(employeeResultHtml);
+
+        $(`#employee-${employee.id}`).on('click' , (event) => {
+            
+            $(`.search-results`).removeClass('selected-employee');
+            $(`#employee-${employee.id}`).addClass('selected-employee');
+
+            //Add the selected employee's id to a hidden input
+            $(`#selectedEmployee`).val(employee.id);
+
+            //Make this remove the disabled option for the button, and make the button call a function that will get the id from the 
+            //hidden input, and assign the employee to the project (this will need to load some information to the database.)
+
+        });
+
     });
 
 

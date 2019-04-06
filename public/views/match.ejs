@@ -14,21 +14,23 @@
                 <h5 class="card-title">Enter Project Info</h5>
                 <p class="card-text">
                     <input type='text' placeholder='Project Name'>
-
+                    <h5>Enter skills in order of priority:</h5>
                     <div id='skillSelects'>
                         
                     </div>
+                    <input type='text' hidden=true id='selectedEmployee'>
+                    <button class='btn-outline-primary' disabled>Assign Employee</button>
                     <!-- Not sure about this <button class='btn-primary'>Save Project</button> -->
                 </p>
               </div>
             </div>
             <div class="card">
               <div class="card-body">
-                <h5 class="card-title">Employee Matches</h5>
-                <p class="card-text" id='employeeMatches'>
-                        <!-- <div class="card-deck"> -->                           
-                                <!-- </div> -->
-                </p>
+                <h5 class="card-title">Employee Matches (Select an Employee from the List)</h5>
+                <div class="card-text" id='employeeMatches'>
+                        <br>
+                        <h5 class='no-content-text'>No Search Criteria</h5>
+                </div>
                 <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
               </div>
             </div>
@@ -50,7 +52,7 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Unassigned Project 2</h5>
-            <p class="card-text" id='employeeMatches'>
+            <p class="card-text">
             </p>
             <!-- <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p> -->
           </div>
