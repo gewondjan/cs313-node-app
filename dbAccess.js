@@ -2,6 +2,8 @@
 // Got help with this from: https://thecodebarbarian.com/using-promise-finally-in-node-js.html
 const promiseFinally = require('promise.prototype.finally');
 
+const asyncLib = require('async');
+
 //This adds the finally guy onto the promise.prototype object
 promiseFinally.shim();
 
@@ -133,6 +135,40 @@ module.exports.removeSkill = function removeSkill(id) {
     });
 }
 
+
+module.exports.assignEmployeeToProject = function assignEmployeeToProject(projectName, employeeId, skills) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'INSERT INTO projects (user_id, name, employee_assigned) VALUES (1, $1, $2) RETURNING id';
+        pool.query(stmt, [projectName, employeeId], function(err, res) {
+            if (err) reject(err)
+            var projectId = res.rows[0].id;
+            stmt2 = 'INSERT INTO project_skills (project_id, skill_id, order_of_importance_for_project) VALUES ($1, (SELECT id from skills where name = $2), $3)';
+            asyncLib.each(skills, function(skill, cb) {
+                pool.query(stmt2, [projectId, skill.skillName, skill.skillPriority], function(err2, res2) {
+                    if (err2) cb(err2);
+                    cb(null, res2);
+                });
+            }, function(error, data) {
+                if (error) reject(error);
+                resolve(data);
+            });
+        });    
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+
+}
+
+
+//  (async function() {
+//      await assignEmployeeToProject('assigner', 2, [{skillName: 'CSS', skillPriority: 1}, {skillName: 'HTML5', skillPriority: 2}]);
+//  }());
+
+
+
 module.exports.addEmployee = function addEmployee(employeeName) {
     var pool = getPool();
     return new Promise(function(resolve, reject) {
@@ -204,7 +240,3 @@ module.exports.addSkillToEmployee = function addSkillToEmployee(employeeId, skil
     });
 }
 
-
-//  (async function() {
-//      await removeSkillFromEmployee(5);
-//  }());

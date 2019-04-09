@@ -138,5 +138,10 @@ app.delete('/removeSkillFromEmployee', async (req, res) => {
     res.send();
 });
 
+app.post('/assignEmployee', async (req, res) => {
+    await dbAccess.assignEmployeeToProject(req.body.projectName, req.body.employeeId, req.body.skills);
+    res.send();
+});
+
 app.listen(port, () => console.log('Running on port ' + port));
 

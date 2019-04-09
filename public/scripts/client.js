@@ -164,6 +164,42 @@ function loadEmployeeResults(employeeList) {
 
 }
 
+function assignEmployeeToProject() {
+    
+    //The Id of the selected employee:
+    var selectedEmployeeId = $(`#selectedEmployee`).val();
+
+    //TODO: this reduce is duplicate code from above. Need to put it in one place, and then call it.
+    var simpleArray = [1, 2, 3];
+    var arrayOfSkills = simpleArray.reduce((array, number) => {
+        var skill = $(`#skillSelect-${number}`).val();
+        if (skill != '') {
+            array.push($(`#skillSelect-${number}`).val());
+        }
+        return array;
+    }, []);
+
+    var skillsArrayOfObjects =  arrayOfSkills.map((skill, index) => {
+        return { skillName: skill, skillPriority: index + 1};
+    });
+
+    $.ajax({
+        method: 'POST',
+        url: '/assignEmployee',
+        data: {
+            projectName: $(`#projectName`).val(),
+            employeeId: selectedEmployeeId,
+            skills: skillsArrayOfObjects
+        },
+        success: function(data) {
+            alert('Successfully assigned employee to project');
+            //This doesn't work :(
+            $(`#navMatch`).trigger('click');
+
+        }
+    });
+}
+
 
 function loadSetUp() {
     loadSkills();

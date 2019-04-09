@@ -13,7 +13,7 @@
               <div class="card-body">
                 <h5 class="card-title">Enter Project Info</h5>
                 <p class="card-text">
-                    <input type='text' placeholder='Project Name'>
+                    <input type='text' id='projectName' placeholder='Project Name'>
                     <h5>Enter skills in order of priority:</h5>
                     <div id='skillSelects'>
                         
@@ -22,7 +22,7 @@
                     <br>
                     <h5>Select an Employee Then Click Assign!</h5>
                     <br>
-                    <button class='btn-outline-primary assign-button' disabled id='assignButton'>Assign Employee</button>
+                    <button class='btn-outline-primary assign-button' disabled id='assignButton' onclick='assignEmployeeToProject()'>Assign Employee</button>
                     <!-- Not sure about this <button class='btn-primary'>Save Project</button> -->
                 </p>
               </div>
