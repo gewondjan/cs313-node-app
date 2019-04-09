@@ -111,11 +111,21 @@ module.exports.addSkill = function addSkill(nameOfSkillToAdd) {
 module.exports.removeSkill = function removeSkill(id) {
     var pool = getPool();
     return new Promise(function(resolve, reject) {
-        var stmt = 'DELETE FROM skills WHERE id = $1';
-        pool.query(stmt, [id], function(err, res) {
-            if (err) reject(err)
-            resolve(res);
+
+        var stmt1 = 'DELETE FROM employee_skills WHERE skill_id = $1'
+        pool.query(stmt1, [id], function(err1, res1) {
+            if (err1) reject(err1)
+            var stmt2 = 'DELETE FROM project_skills WHERE skill_id = $1';
+            pool.query(stmt2, [id], function(err2, res2) {
+                if (err2) reject(err2)
+                var stmt3 = 'DELETE FROM skills WHERE id = $1';
+                pool.query(stmt3, [id], function(err3, res3) {
+                    if (err3) reject(err3)
+                    resolve(res3);
+                });    
+            });    
         });    
+
     }).catch((err) => {
         console.log(err.message);
     }).finally(() => {

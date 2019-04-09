@@ -1,5 +1,8 @@
-
-
+function addSkillEditorToSetUp() {
+    if ($(`#newSkillEditor`).length == 0) {
+        $(`#skillsList`).html(`<li id='listItemForNewSkillEditor'><input type='text' id='newSkillEditor'><button onclick='addSkillToDatabase()'><i class="fas fa-check"></i></button></li>` + $(`#skillsList`).html());
+    }
+}
 
 function loadPage(pageName, inputObject) {
     inputObject = JSON.parse(inputObject);
@@ -258,11 +261,7 @@ function loadEmployeeEdit(employeeId) {
     });
 }
 
-function addSkillEditor() {
-    if ($(`#newSkillEditor`).length == 0) {
-        $(`#skillsList`).html(`<li id='listItemForNewSkillEditor'><input type='text' id='newSkillEditor'><button onclick='addSkillToDatabase()'><i class="fas fa-check"></i></button></li>` + $(`#skillsList`).html());
-    }
-}
+
 
 function addSkillToDatabase() {
     var newSkillName =  $(`#newSkillEditor`).val();
