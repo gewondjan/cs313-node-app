@@ -162,6 +162,43 @@ module.exports.assignEmployeeToProject = function assignEmployeeToProject(projec
 
 }
 
+module.exports.getAllProjects = function getAllProjects() {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'SELECT p.name as project_name, p.id as project_id, e.name as employee_name FROM projects AS p JOIN employees AS e ON e.id = p.employee_assigned';
+        pool.query(stmt, function(err, res) {
+            if (err) reject(err)
+            resolve(res.rows);
+        });   
+    }).catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
+
+
+module.exports.removeProject = function removeProject(projectId) {
+    var pool = getPool();
+    return new Promise(function(resolve, reject) {
+        var stmt = 'DELETE FROM project_skills WHERE project_id = $1';
+        pool.query(stmt, [projectId], function(err, res) {
+            if (err) reject(err)
+            var stmt2 = 'DELETE FROM projects WHERE id = $1';
+            pool.query(stmt2, [projectId], function(err2, res2) {
+                if (err2) reject(err2)
+                resolve(res2);
+            });    
+        });    
+    })
+    .catch((err) => {
+        console.log(err.message);
+    }).finally(() => {
+        pool.end();
+    });
+}
+
+
 
 //  (async function() {
 //      await assignEmployeeToProject('assigner', 2, [{skillName: 'CSS', skillPriority: 1}, {skillName: 'HTML5', skillPriority: 2}]);

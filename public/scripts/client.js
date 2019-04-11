@@ -19,6 +19,7 @@ function loadPage(pageName, inputObject) {
             loadMatch();
             break;
         case 'complete':
+            loadCompletePage();
             break;
         default:
             break;
@@ -435,6 +436,52 @@ function removeSkillFromEmployee(employeeSkillId) {
 
     });
 
+}
+
+function loadCompletePage() {
+    $.ajax({
+        method: 'GET',
+        url: '/getAllProjects',
+        success: function(data) {
+            // alert(data[0].name);
+
+            $('#projectHolder').empty();
+            data.forEach((project) => {
+                $('#projectHolder').append(`
+                <!-- Got this from: https://getbootstrap.com/docs/4.0/components/card/#card-decks -->
+                <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">${project.project_name}</h5>
+                  <p class="card-text">
+                    Employee Assigned: ${project.employee_name}
+                  </p>
+                  <button class='btn-primary' onclick='removeProject(${project.project_id})'>Mark as Complete</button>
+                </div>
+              </div>
+                
+                
+                
+                `);
+            });
+
+        }
+    });
+
+}
+
+function removeProject(projectId) {
+    //Right now the mark as complete function only serves to delete the project, and it does not increment the points
+    //for the employee assigned, but that can be added later!
+    $.ajax({
+        method: 'DELETE',
+        url: '/removeProject',
+        data: {
+            projectId: projectId
+        },
+        success: function(data) {
+            loadCompletePage();
+        }
+    });
 }
 
 //TODO:

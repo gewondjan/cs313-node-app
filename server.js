@@ -143,5 +143,16 @@ app.post('/assignEmployee', async (req, res) => {
     res.send();
 });
 
+app.get('/getAllProjects', async (req, res) => {
+    var projects = await dbAccess.getAllProjects();
+    res.send(projects);
+});
+
+app.delete('/removeProject', async (req, res) => {
+    await dbAccess.removeProject(req.body.projectId);
+    res.send();
+
+});
+
 app.listen(port, () => console.log('Running on port ' + port));
 
